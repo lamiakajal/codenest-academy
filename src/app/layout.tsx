@@ -31,14 +31,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f6fb" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0d1f" },
-  ],
+  themeColor: "#f5f6fb",
 };
 
-// Runs before the first paint so the saved theme never flashes the wrong colors
-const themeScript = `(function(){try{var t=localStorage.getItem("codenest-theme");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){}})();`;
+// Runs before the first paint. The site always opens in light mode unless the
+// visitor has previously chosen dark mode with the toggle button.
+const themeScript = `(function(){try{var t=localStorage.getItem("codenest-theme");document.documentElement.dataset.theme=t==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}})();`;
 
 export default function RootLayout({
   children,
@@ -47,6 +45,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      data-theme="light"
       className={`${display.variable} ${body.variable}`}
     >
       <head>
