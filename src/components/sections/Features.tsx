@@ -41,12 +41,11 @@ export default function Features() {
             </div>
 
             <div>
-              <div className="group relative aspect-4/3 w-full overflow-hidden rounded-3xl border border-line bg-surface-2 shadow-card">
+              <div className="group relative aspect-16/10 w-full overflow-hidden rounded-3xl border border-line bg-surface-2 shadow-card">
                 <Image
                   src={feature.image}
                   alt={feature.alt}
                   fill
-                  unoptimized
                   sizes="(max-width: 1024px) 100vw, 560px"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />

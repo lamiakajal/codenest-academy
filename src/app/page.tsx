@@ -10,6 +10,7 @@ import Projects from "@/components/sections/Projects";
 import Testimonials from "@/components/sections/Testimonials";
 import FAQ from "@/components/sections/FAQ";
 import CallToAction from "@/components/sections/CallToAction";
+import Location from "@/components/sections/Location";
 
 export default function HomePage() {
   return (
@@ -37,6 +38,8 @@ export default function HomePage() {
       <FAQ />
       {/* 11. Final call to action */}
       <CallToAction />
+      {/* 12. Map to the Banani lab (dark style) */}
+      <Location />
     </>
   );
 }

@@ -17,7 +17,7 @@ interface Bubble {
 // Hues for violet, mint, amber and sky bubbles that match the brand palette
 const HUES = [255, 160, 40, 200];
 
-// Soft glowing bubbles drifting upward behind the page content
+// Glowing bubbles drifting upward over the page (they never block clicks)
 export default function FloatingBubbles() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -37,11 +37,11 @@ export default function FloatingBubbles() {
     const spawn = (fromBottom: boolean): Bubble => ({
       x: Math.random() * width,
       y: fromBottom ? height + 20 : Math.random() * height,
-      radius: Math.random() * 8 + 4,
-      dx: (Math.random() - 0.5) * 0.4,
-      dy: -(Math.random() * 0.35 + 0.15),
+      radius: Math.random() * 20 + 7,
+      dx: (Math.random() - 0.5) * 0.7,
+      dy: -(Math.random() * 0.8 + 0.35),
       hue: HUES[Math.floor(Math.random() * HUES.length)],
-      alpha: Math.random() * 0.25 + 0.2,
+      alpha: Math.random() * 0.35 + 0.4,
       pulseSpeed: Math.random() * 0.02 + 0.008,
       pulseAngle: Math.random() * Math.PI * 2,
     });
@@ -54,7 +54,7 @@ export default function FloatingBubbles() {
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.max(8, Math.floor(Math.min(width, 1400) / 80));
+      const count = Math.max(16, Math.floor(Math.min(width, 1600) / 42));
       bubbles = Array.from({ length: count }, () => spawn(false));
     };
 
@@ -77,15 +77,15 @@ export default function FloatingBubbles() {
 
         ctx.beginPath();
         ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${b.hue}, 85%, ${light}%, ${b.alpha * 0.35})`;
+        ctx.fillStyle = `hsla(${b.hue}, 85%, ${light}%, ${b.alpha * 0.28})`;
         ctx.fill();
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 2;
         ctx.strokeStyle = `hsla(${b.hue}, 85%, ${light}%, ${b.alpha})`;
         ctx.stroke();
 
         // Small highlight gives the bubble a glassy look
         ctx.beginPath();
-        ctx.arc(b.x - r * 0.35, b.y - r * 0.35, r * 0.22, 0, Math.PI * 2);
+        ctx.arc(b.x - r * 0.35, b.y - r * 0.35, r * 0.2, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${isDark ? 0.55 : 0.85})`;
         ctx.fill();
       }
@@ -107,7 +107,7 @@ export default function FloatingBubbles() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full"
+      className="pointer-events-none fixed inset-0 z-20 h-full w-full"
     />
   );
 }
