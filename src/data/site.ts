@@ -102,7 +102,7 @@ export const mentors: Mentor[] = [
     role: "Lead full-stack architect",
     experience: "8 years in industry",
     bio: "Built payment and logistics platforms for startups across Dhaka and Singapore. He teaches system design by having students break and repair a real service.",
-    image: "/images/mentor-imran.svg",
+    image: "/images/mentor-imran.jpg",
     focus: "Next.js and system design",
   },
   {
@@ -110,7 +110,7 @@ export const mentors: Mentor[] = [
     role: "Senior frontend engineer",
     experience: "6 years in industry",
     bio: "Specializes in accessible interfaces and design systems. Her code reviews focus on readable components and the details users actually feel.",
-    image: "/images/mentor-sabiha.svg",
+    image: "/images/mentor-sabiha.jpg",
     focus: "React and UI engineering",
   },
   {
@@ -118,7 +118,7 @@ export const mentors: Mentor[] = [
     role: "Backend and DevOps engineer",
     experience: "5 years in industry",
     bio: "Runs APIs that serve millions of requests a day. He walks students through authentication, databases and deployment pipelines step by step.",
-    image: "/images/mentor-alif.svg",
+    image: "/images/mentor-alif.jpg",
     focus: "Node.js and security",
   },
 ];
@@ -130,8 +130,8 @@ export const features = [
     title: "Build real software from week one",
     description:
       "Every module ends with something that runs in the browser. By graduation you will have shipped a portfolio of full applications with authentication, databases and live deployments, not just finished exercises.",
-    image: "/images/feature-projects.svg",
-    alt: "Illustration of a project board with code, tasks and a running app",
+    image: "/images/feature-projects.jpg",
+    alt: "A smiling student with classmates working on laptops in a class",
     points: ["Weekly build challenges", "Real client-style briefs", "Public GitHub portfolio"],
   },
   {
@@ -139,8 +139,8 @@ export const features = [
     title: "Get unstuck in minutes, not days",
     description:
       "Post a question in the student forum and a mentor or senior alumnus replies, usually within the hour. Support does not expire when the course ends.",
-    image: "/images/feature-support.svg",
-    alt: "Illustration of a mentor helping a student through a chat window",
+    image: "/images/feature-support.jpg",
+    alt: "A student wearing headphones and learning on a laptop",
     points: ["Mentor replies within hours", "Private alumni community", "Weekly live debugging sessions"],
   },
   {
@@ -148,8 +148,8 @@ export const features = [
     title: "Learn the skills employers pay for",
     description:
       "We train you for the interview as seriously as for the job. Expect mock technical rounds, resume and GitHub reviews, and introductions to hiring partners who are looking for junior engineers.",
-    image: "/images/feature-career.svg",
-    alt: "Illustration of a rising salary chart beside a laptop",
+    image: "/images/feature-career.jpg",
+    alt: "A smiling developer at a laptop with money fanned out behind him",
     points: ["Mock technical interviews", "Resume and portfolio review", "Hiring partner introductions"],
   },
 ];

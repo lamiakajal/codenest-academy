@@ -17,14 +17,13 @@ export default function Instructors() {
               key={mentor.name}
               className="group overflow-hidden rounded-3xl border border-line bg-bg p-5 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/60"
             >
-              <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-surface-2">
+              <div className="relative aspect-4/5 w-full overflow-hidden rounded-2xl bg-surface-2">
                 <Image
                   src={mentor.image}
-                  alt={`Portrait illustration of ${mentor.name}`}
+                  alt={`Portrait of ${mentor.name}`}
                   fill
-                  unoptimized
                   sizes="(max-width: 640px) 100vw, 380px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="px-1 pb-2 pt-6">
