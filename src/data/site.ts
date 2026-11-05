@@ -15,11 +15,17 @@ export const navLinks: NavItem[] = [
   { label: "Home", href: "/#home" },
   { label: "Courses", href: "/#courses" },
   { label: "Why CodeNest", href: "/#features" },
-  { label: "Roadmap", href: "/#roadmap" },
   { label: "Mentors", href: "/#mentors" },
-  { label: "Campus", href: "/#campus" },
-  { label: "Projects", href: "/#projects" },
   { label: "FAQ", href: "/#faq" },
+];
+
+// Extra links tucked into the "More" dropdown (and listed in the mobile menu)
+export const moreLinks: NavItem[] = [
+  { label: "Learning roadmap", href: "/#roadmap" },
+  { label: "Campus", href: "/#campus" },
+  { label: "Student projects", href: "/#projects" },
+  { label: "Reviews", href: "/#reviews" },
+  { label: "Find us", href: "/#location" },
 ];
 
 export interface Course {

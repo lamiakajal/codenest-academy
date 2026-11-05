@@ -1,7 +1,7 @@
 import SectionHeading from "@/components/ui/SectionHeading";
 import { SITE } from "@/data/site";
 
-// Map section shown before the footer. The map always uses a dark style.
+// Full-width map section shown right before the footer. The map always uses a dark style.
 export default function Location() {
   const query = encodeURIComponent(SITE.address);
   // Keyless Google Maps embed plus a normal link for directions
@@ -9,38 +9,40 @@ export default function Location() {
   const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
 
   return (
-    <section id="location" className="relative pb-20 md:pb-28">
+    <section id="location" className="relative">
+      {/* Heading stays inside the normal page container */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Find us in Banani, Dhaka"
           description="Drop in for a free campus tour, or get directions to the lab below."
         />
+      </div>
 
-        <div data-reveal className="relative overflow-hidden rounded-3xl border border-line bg-[#0d1030] shadow-card">
-          {/* Inverting the light map tiles gives a dark map without any API key */}
-          <iframe
-            title={`Map showing ${SITE.name} at ${SITE.address}`}
-            src={embedUrl}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-            className="block h-[420px] w-full border-0 md:h-[520px]"
-            style={{ filter: "invert(92%) hue-rotate(180deg) contrast(0.95) saturate(0.8)" }}
-          />
+      {/* The map itself runs edge to edge, outside the container */}
+      <div data-reveal className="relative w-full border-y border-line bg-[#0d1030]">
+        {/* Inverting the light map tiles gives a dark map without any API key */}
+        <iframe
+          title={`Map showing ${SITE.name} at ${SITE.address}`}
+          src={embedUrl}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+          className="block h-[420px] w-full border-0 sm:h-[500px] lg:h-[580px]"
+          style={{ filter: "invert(92%) hue-rotate(180deg) contrast(0.95) saturate(0.8)" }}
+        />
 
-          {/* Address card */}
-          <div className="border-t border-white/10 bg-[#0d1030]/95 p-6 text-white backdrop-blur md:absolute md:bottom-6 md:left-6 md:max-w-sm md:rounded-2xl md:border md:p-6">
-            <p className="text-sm font-semibold text-white/60">{SITE.name}</p>
-            <p className="mt-2 text-base font-bold leading-snug">{SITE.address}</p>
-            <a
-              href={directionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-[#1b1360] transition hover:-translate-y-0.5 hover:bg-white/90 active:scale-95"
-            >
-              Get directions
-            </a>
-          </div>
+        {/* Address card */}
+        <div className="border-t border-white/10 bg-[#0d1030]/95 p-6 text-white backdrop-blur md:absolute md:bottom-8 md:left-8 md:max-w-sm md:rounded-2xl md:border lg:left-16">
+          <p className="text-sm font-semibold text-white/60">{SITE.name}</p>
+          <p className="mt-2 text-base font-bold leading-snug">{SITE.address}</p>
+          <a
+            href={directionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-[#1b1360] transition hover:-translate-y-0.5 hover:bg-white/90 active:scale-95"
+          >
+            Get directions
+          </a>
         </div>
       </div>
     </section>
