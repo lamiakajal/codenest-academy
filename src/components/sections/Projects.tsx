@@ -1,6 +1,7 @@
 import Image from "next/image";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { projects } from "@/data/site";
+import { stagger } from "@/lib/reveal";
 
 // New section: examples of what students have built
 export default function Projects() {
@@ -13,9 +14,11 @@ export default function Projects() {
         />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <article
               key={project.title}
+              data-reveal
+              style={stagger(index)}
               className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-bg shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/60"
             >
               <div className="relative aspect-4/3 w-full overflow-hidden bg-surface-2">

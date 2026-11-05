@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { SITE, campusPillars } from "@/data/site";
+import { stagger } from "@/lib/reveal";
 
 export default function Campus() {
   return (
@@ -13,7 +14,7 @@ export default function Campus() {
         />
 
         {/* Lab illustration */}
-        <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-line bg-surface-2 shadow-card">
+        <div data-reveal className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-line bg-surface-2 shadow-card">
           <div className="relative aspect-video w-full">
             <Image
               src="/images/campus-lab.jpg"
@@ -27,9 +28,11 @@ export default function Campus() {
 
         {/* Four pillars */}
         <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {campusPillars.map((item) => (
+          {campusPillars.map((item, index) => (
             <div
               key={item.title}
+              data-reveal
+              style={stagger(index)}
               className="rounded-2xl border border-line bg-surface p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/60 hover:shadow-card"
             >
               <h3 className="text-base font-extrabold">{item.title}</h3>
@@ -39,7 +42,7 @@ export default function Campus() {
         </div>
 
         {/* Visit card */}
-        <div className="relative mx-auto mt-12 max-w-5xl overflow-hidden rounded-3xl bg-[#1b1360] p-8 text-white shadow-card sm:p-12">
+        <div data-reveal className="relative mx-auto mt-12 max-w-5xl overflow-hidden rounded-3xl bg-[#1b1360] p-8 text-white shadow-card sm:p-12">
           <div aria-hidden="true" className="absolute -right-16 -top-16 h-64 w-64 animate-pulse-glow rounded-full bg-brand/60 blur-3xl" />
           <div aria-hidden="true" className="absolute -bottom-20 left-10 h-56 w-56 animate-pulse-glow rounded-full bg-accent/40 blur-3xl" />
           <div className="relative z-10 grid items-center gap-8 md:grid-cols-[1.4fr_1fr]">

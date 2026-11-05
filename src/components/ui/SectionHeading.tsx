@@ -12,6 +12,7 @@ export default function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div
+      data-reveal
       className={`mb-12 max-w-2xl md:mb-16 ${
         align === "center" ? "mx-auto text-center" : "text-left"
       }`}

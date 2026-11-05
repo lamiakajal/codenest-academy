@@ -16,7 +16,7 @@ export default function Location() {
           description="Drop in for a free campus tour, or get directions to the lab below."
         />
 
-        <div className="relative overflow-hidden rounded-3xl border border-line bg-[#0d1030] shadow-card">
+        <div data-reveal className="relative overflow-hidden rounded-3xl border border-line bg-[#0d1030] shadow-card">
           {/* Inverting the light map tiles gives a dark map without any API key */}
           <iframe
             title={`Map showing ${SITE.name} at ${SITE.address}`}

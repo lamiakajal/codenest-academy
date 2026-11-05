@@ -264,6 +264,27 @@ export const testimonials = [
     quote:
       "Working in the offline lab with a team gave me the confidence to join a real software agency from day one.",
   },
+  {
+    name: "Maliha Tabassum",
+    role: "Frontend Developer",
+    batch: "Batch 05 graduate",
+    quote:
+      "The weekly code reviews taught me to write cleaner components. I rebuilt my portfolio three times and each version got better.",
+  },
+  {
+    name: "Rafiul Karim",
+    role: "Backend Engineer",
+    batch: "Batch 02 graduate",
+    quote:
+      "Designing real APIs with authentication and a database made interviews feel familiar. I had already built what they asked about.",
+  },
+  {
+    name: "Anika Sultana",
+    role: "Software Engineer Intern",
+    batch: "Batch 06 student",
+    quote:
+      "I started with no coding background. The step-by-step roadmap and patient mentors kept me going when I felt stuck.",
+  },
 ];
 
 export const faqs = [

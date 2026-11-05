@@ -1,5 +1,6 @@
 import SectionHeading from "@/components/ui/SectionHeading";
 import { roadmap } from "@/data/site";
+import { stagger } from "@/lib/reveal";
 
 // A real sequence, so numbered stages are meaningful here
 export default function Roadmap() {
@@ -18,6 +19,8 @@ export default function Roadmap() {
           {roadmap.map((item, index) => (
             <li
               key={item.title}
+              data-reveal
+              style={stagger(index % 2)}
               className={`relative mb-12 flex gap-6 last:mb-0 md:gap-0 ${
                 index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
               }`}

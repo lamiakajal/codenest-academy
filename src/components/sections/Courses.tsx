@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { courses } from "@/data/site";
+import { stagger } from "@/lib/reveal";
 
 export default function Courses() {
   return (
@@ -12,9 +13,11 @@ export default function Courses() {
         />
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {courses.map((course) => (
+          {courses.map((course, index) => (
             <article
               key={course.slug}
+              data-reveal
+              style={stagger(index)}
               className={`relative flex flex-col rounded-3xl border bg-surface p-8 shadow-card transition-all duration-300 hover:-translate-y-1.5 ${
                 course.popular ? "border-brand ring-2 ring-brand/25" : "border-line hover:border-brand/50"
               }`}

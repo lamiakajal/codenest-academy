@@ -3,6 +3,7 @@
 import { useState } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { faqs } from "@/data/site";
+import { stagger } from "@/lib/reveal";
 
 export default function FAQ() {
   // Index of the open question (the first one starts open)
@@ -22,6 +23,8 @@ export default function FAQ() {
             return (
               <div
                 key={item.q}
+                data-reveal
+                style={stagger(index)}
                 className={`overflow-hidden rounded-2xl border bg-bg transition-colors ${
                   isOpen ? "border-brand/60" : "border-line"
                 }`}

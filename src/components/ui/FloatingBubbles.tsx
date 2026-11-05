@@ -37,11 +37,11 @@ export default function FloatingBubbles() {
     const spawn = (fromBottom: boolean): Bubble => ({
       x: Math.random() * width,
       y: fromBottom ? height + 20 : Math.random() * height,
-      radius: Math.random() * 20 + 7,
+      radius: Math.random() * 7 + 3,
       dx: (Math.random() - 0.5) * 0.7,
-      dy: -(Math.random() * 0.8 + 0.35),
+      dy: -(Math.random() * 0.6 + 0.25),
       hue: HUES[Math.floor(Math.random() * HUES.length)],
-      alpha: Math.random() * 0.35 + 0.4,
+      alpha: Math.random() * 0.2 + 0.15,
       pulseSpeed: Math.random() * 0.02 + 0.008,
       pulseAngle: Math.random() * Math.PI * 2,
     });
@@ -54,7 +54,7 @@ export default function FloatingBubbles() {
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.max(16, Math.floor(Math.min(width, 1600) / 42));
+      const count = Math.max(14, Math.floor(Math.min(width, 1600) / 55));
       bubbles = Array.from({ length: count }, () => spawn(false));
     };
 
@@ -77,9 +77,9 @@ export default function FloatingBubbles() {
 
         ctx.beginPath();
         ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${b.hue}, 85%, ${light}%, ${b.alpha * 0.28})`;
+        ctx.fillStyle = `hsla(${b.hue}, 85%, ${light}%, ${b.alpha * 0.2})`;
         ctx.fill();
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1.2;
         ctx.strokeStyle = `hsla(${b.hue}, 85%, ${light}%, ${b.alpha})`;
         ctx.stroke();
 

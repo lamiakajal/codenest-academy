@@ -1,9 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
-import HeroEditor from "./HeroEditor";
 
 export default function Hero() {
   return (
     <section id="home" className="relative overflow-hidden pb-16 pt-12 md:pb-24 md:pt-20">
+      {/* Soft color glows behind the hero */}
+      <div aria-hidden="true" className="absolute -left-24 top-10 -z-10 h-80 w-80 animate-pulse-glow rounded-full bg-brand/25 blur-3xl" />
+      <div aria-hidden="true" className="absolute -right-20 bottom-0 -z-10 h-80 w-80 animate-pulse-glow rounded-full bg-accent/25 blur-3xl" />
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2">
           {/* Left: headline and calls to action */}
@@ -57,9 +61,43 @@ export default function Hero() {
             </dl>
           </div>
 
-          {/* Right: self-typing code editor */}
-          <div className="animate-float">
-            <HeroEditor />
+          {/* Right: student photo with floating info cards */}
+          <div className="relative mx-auto w-full max-w-lg">
+            <div className="animate-float">
+              <Image
+                src="/images/hero-students.png"
+                alt="Four CodeNest students learning with laptops and phones"
+                width={900}
+                height={886}
+                priority
+                sizes="(max-width: 1024px) 90vw, 520px"
+                className="h-auto w-full drop-shadow-2xl"
+              />
+            </div>
+
+            <div className="animate-float-alt absolute -left-2 top-10 flex items-center gap-3 rounded-2xl border border-line bg-surface/95 px-4 py-3 shadow-card backdrop-blur sm:-left-8">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent/15 text-accent">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2.5]" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m5 12 5 5 9-10" />
+                </svg>
+              </span>
+              <div>
+                <p className="text-sm font-bold">15,000+ placed</p>
+                <p className="text-xs text-muted">in tech teams</p>
+              </div>
+            </div>
+
+            <div className="animate-float absolute -right-2 bottom-12 flex items-center gap-3 rounded-2xl border border-line bg-surface/95 px-4 py-3 shadow-card backdrop-blur sm:-right-6">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/15 text-brand">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 5l-4 14" />
+                </svg>
+              </span>
+              <div>
+                <p className="text-sm font-bold">Live mentor reviews</p>
+                <p className="text-xs text-muted">after every project</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
