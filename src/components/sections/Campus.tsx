@@ -17,9 +17,10 @@ export default function Campus() {
         <div data-reveal className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-line bg-surface-2 shadow-card">
           <div className="relative aspect-video w-full">
             <Image
-              src="/images/campus-lab.jpg"
-              alt="Students working at computers in the CodeNest lab"
+              src="/images/campus-lab.svg"
+              alt="Illustration of the CodeNest lab with rows of workstations and a mentor desk"
               fill
+              unoptimized
               sizes="(max-width: 1024px) 100vw, 1024px"
               className="object-cover"
             />
