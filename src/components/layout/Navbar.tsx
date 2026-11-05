@@ -12,6 +12,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   // "More" dropdown state; the ref lets us close it when clicking elsewhere
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement | null>(null);
@@ -43,9 +44,12 @@ export default function Navbar() {
   useEffect(() => {
     let cancelled = false;
     fetch("/api/auth/me")
-      .then((res) => res.json() as Promise<ApiResponse<{ user: SessionUser | null }>>)
+      .then((res) => res.json() as Promise<ApiResponse<{ user: SessionUser | null; isAdmin: boolean }>>)
       .then((body) => {
-        if (!cancelled) setUser(body.data?.user ?? null);
+        if (!cancelled) {
+          setUser(body.data?.user ?? null);
+          setIsAdmin(body.data?.isAdmin ?? false);
+        }
       })
       .catch(() => {
         // Treat network or config errors as a signed-out visitor
@@ -58,7 +62,9 @@ export default function Navbar() {
   const signOut = async () => {
     await fetch("/api/auth/signout", { method: "POST" });
     setUser(null);
+    setIsAdmin(false);
     setIsOpen(false);
+    window.location.assign("/");
   };
 
   const closeMenu = () => setIsOpen(false);
@@ -125,9 +131,14 @@ export default function Navbar() {
           <ThemeToggle />
           {user ? (
             <>
-              <span className="max-w-40 truncate px-2 text-sm font-semibold" title={user.email}>
+              {isAdmin && (
+                <Link href="/admin" className="rounded-lg px-3 py-2 text-sm font-semibold text-accent transition hover:bg-surface-2">
+                  Admin
+                </Link>
+              )}
+              <Link href="/account" className="max-w-40 truncate rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-surface-2" title={user.email}>
                 Hi, {user.name.split(" ")[0]}
-              </span>
+              </Link>
               <button
                 type="button"
                 onClick={signOut}
@@ -202,13 +213,23 @@ export default function Navbar() {
           </nav>
           <div className="mt-4 grid gap-2 border-t border-line pt-4">
             {user ? (
-              <button
-                type="button"
-                onClick={signOut}
-                className="rounded-lg border border-line py-3 text-sm font-semibold"
-              >
-                Sign out ({user.name.split(" ")[0]})
-              </button>
+              <>
+                <Link href="/account" onClick={closeMenu} className="rounded-lg border border-line py-3 text-center text-sm font-semibold">
+                  My account ({user.name.split(" ")[0]})
+                </Link>
+                {isAdmin && (
+                  <Link href="/admin" onClick={closeMenu} className="rounded-lg border border-accent/50 py-3 text-center text-sm font-semibold text-accent">
+                    Admin dashboard
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={signOut}
+                  className="rounded-lg border border-line py-3 text-sm font-semibold"
+                >
+                  Sign out
+                </button>
+              </>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 <Link href="/signin" onClick={closeMenu} className="rounded-lg border border-line py-3 text-center text-sm font-semibold">

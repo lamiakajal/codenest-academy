@@ -1,10 +1,13 @@
 import { connectDB } from "@/lib/db";
 import { json, requireDatabase } from "@/lib/api";
+import { rateLimit } from "@/lib/rateLimit";
 import { isValidEmail, readJson } from "@/lib/validators";
 import Subscriber from "@/models/Subscriber";
 
 // POST /api/newsletter - subscribes an email to the newsletter
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "newsletter", 6, 60 * 60 * 1000);
+  if (limited) return limited;
   const missingDb = requireDatabase();
   if (missingDb) return missingDb;
 

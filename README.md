@@ -10,6 +10,9 @@ A full-stack coding school website built with Next.js (App Router), TypeScript, 
 - Custom 404 page and error page
 - Sign up, sign in and sign out (bcrypt password hashing, signed httpOnly cookie)
 - Enrollment form and newsletter form that save to MongoDB
+- Forgot and reset password by email link, welcome and enrollment emails (SMTP optional)
+- My account page (protected) and an admin dashboard at /admin to review enrollments and change their status
+- Rate limiting on sign in, sign up, enroll, newsletter and password reset
 - All text and code comments are in English
 
 ## Run it locally
@@ -26,8 +29,20 @@ Open http://localhost:3000. The website works without a database. Only sign up, 
 
 1. Create a free cluster on MongoDB Atlas (or run MongoDB locally).
 2. Put the connection string in `.env.local` as `MONGODB_URI`.
-3. Put a long random string in `AUTH_SECRET` (for example from `openssl rand -base64 32`).
+3. Put a long random string in `AUTH_SECRET`. Generate one with `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`.
 4. Restart `npm run dev`. Collections (`users`, `enrollments`, `subscribers`) are created automatically.
+
+## Admin dashboard
+
+1. Create your own account on the Sign up page first.
+2. Put that email in `ADMIN_EMAILS` in `.env.local` and restart the server.
+3. Sign in and open `/admin`. Other visitors see a normal 404 page.
+
+Create the admin account before the site is public. Email addresses are not verified yet, so someone could register an admin email before you do.
+
+## Emails
+
+Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` and `MAIL_FROM` to send real emails (any SMTP provider works). Without them, emails are printed in the terminal, so you can still copy the password reset link while testing. Set `SITE_URL` to your real domain in production.
 
 ## Deploy
 

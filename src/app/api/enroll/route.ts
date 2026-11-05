@@ -1,7 +1,9 @@
 import { connectDB } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { json, requireDatabase } from "@/lib/api";
-import { courses } from "@/data/site";
+import { rateLimit } from "@/lib/rateLimit";
+import { sendMail } from "@/lib/mail";
+import { SITE, courses } from "@/data/site";
 import {
   isValidEmail,
   isValidName,
@@ -15,6 +17,8 @@ type Mode = (typeof MODES)[number];
 
 // POST /api/enroll - stores a course enrollment request
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "enroll", 6, 60 * 60 * 1000);
+  if (limited) return limited;
   const missingDb = requireDatabase();
   if (missingDb) return missingDb;
 
@@ -49,6 +53,13 @@ export async function POST(request: Request) {
       mode,
       message: typeof message === "string" ? message.trim().slice(0, 600) : "",
       userId: session?.id ?? null,
+    });
+
+    const course = courses.find((c) => c.slug === courseSlug);
+    await sendMail({
+      to: email.trim().toLowerCase(),
+      subject: `We received your ${SITE.name} enrollment request`,
+      text: `Hi ${fullName.trim()},\n\nThanks for applying to ${course?.title ?? "our course"}. Our admissions team will call you within 24 hours to confirm your seat and share the payment plan.\n\n${SITE.name}`,
     });
 
     return json({ ok: true, message: "Request received. Our admissions team will contact you within 24 hours." }, 201);

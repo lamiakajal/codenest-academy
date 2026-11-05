@@ -2,6 +2,9 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { createSession } from "@/lib/auth";
 import { json, requireDatabase } from "@/lib/api";
+import { rateLimit } from "@/lib/rateLimit";
+import { sendMail } from "@/lib/mail";
+import { SITE } from "@/data/site";
 import {
   isStrongPassword,
   isValidEmail,
@@ -12,6 +15,8 @@ import User from "@/models/User";
 
 // POST /api/auth/signup - creates a new student account and signs them in
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "signup", 8, 60 * 60 * 1000);
+  if (limited) return limited;
   const missingDb = requireDatabase();
   if (missingDb) return missingDb;
 
@@ -51,6 +56,13 @@ export async function POST(request: Request) {
       id: String(user._id),
       name: user.name,
       email: user.email,
+    });
+
+    // Welcome email (printed in the terminal until SMTP is configured)
+    await sendMail({
+      to: user.email,
+      subject: `Welcome to ${SITE.name}`,
+      text: `Hi ${user.name},\n\nYour ${SITE.name} account is ready. You can now enroll in a course from our website.\n\nSee you in class,\n${SITE.name}`,
     });
 
     return json({ ok: true, message: "Account created. Welcome aboard!" }, 201);
