@@ -1,6 +1,7 @@
 import Image from "next/image";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { mentors } from "@/data/site";
+import { stagger } from "@/lib/reveal";
 
 export default function Instructors() {
   return (
@@ -12,9 +13,11 @@ export default function Instructors() {
         />
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {mentors.map((mentor) => (
+          {mentors.map((mentor, index) => (
             <article
               key={mentor.name}
+              data-reveal
+              style={stagger(index)}
               className="group overflow-hidden rounded-3xl border border-line bg-bg p-5 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/60"
             >
               <div className="relative aspect-4/5 w-full overflow-hidden rounded-2xl bg-surface-2">

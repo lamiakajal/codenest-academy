@@ -4,7 +4,7 @@ export default function CallToAction() {
   return (
     <section className="relative py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-[2rem] bg-[#1b1360] px-6 py-16 text-center text-white shadow-card sm:px-12 sm:py-20">
+        <div data-reveal className="relative overflow-hidden rounded-[2rem] bg-[#1b1360] px-6 py-16 text-center text-white shadow-card sm:px-12 sm:py-20">
           <div aria-hidden="true" className="absolute -left-20 -top-20 h-72 w-72 animate-pulse-glow rounded-full bg-brand/70 blur-3xl" />
           <div aria-hidden="true" className="absolute -bottom-24 -right-10 h-72 w-72 animate-pulse-glow rounded-full bg-accent/45 blur-3xl" />
 

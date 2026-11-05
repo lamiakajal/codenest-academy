@@ -10,6 +10,7 @@ export default function Features() {
         {features.map((feature, index) => (
           <div
             key={feature.title}
+            data-reveal
             className={`grid items-center gap-10 lg:grid-cols-2 lg:gap-20 ${
               index % 2 === 1 ? "lg:[&>div:first-child]:order-2" : ""
             }`}
