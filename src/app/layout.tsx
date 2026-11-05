@@ -7,6 +7,7 @@ import FloatingBubbles from "@/components/ui/FloatingBubbles";
 import Splash from "@/components/ui/Splash";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import BackToTop from "@/components/ui/BackToTop";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 import { SITE } from "@/data/site";
 
 // Display font for headings and body font for paragraphs
@@ -55,6 +56,11 @@ export default function RootLayout({
         {/* Launch screen with logo and round loader */}
         <Splash />
         <ScrollProgress />
+        <ScrollReveal />
+        {/* Without JavaScript, show scroll-reveal content immediately */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important}`}</style>
+        </noscript>
 
         {/* Ambient animated background */}
         <FloatingBubbles />

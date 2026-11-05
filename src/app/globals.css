@@ -192,6 +192,13 @@ html {
   animation: pulseGlow 1.8s ease-in-out infinite;
 }
 
+/* ---------- Scroll reveal (see ScrollReveal.tsx) ---------- */
+[data-reveal] { opacity: 0; }
+[data-reveal].in {
+  animation: riseIn 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
 /* ---------- Respect reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
