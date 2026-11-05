@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import ThemeToggle from "@/components/ui/ThemeToggle";
-import { navLinks } from "@/data/site";
+import { moreLinks, navLinks } from "@/data/site";
 import type { ApiResponse, SessionUser } from "@/types";
 
 export default function Navbar() {
@@ -12,6 +12,25 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
+  // "More" dropdown state; the ref lets us close it when clicking elsewhere
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) setMoreOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMoreOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [moreOpen]);
 
   // Add a shadow once the page has been scrolled
   useEffect(() => {
@@ -68,6 +87,37 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+
+          {/* More dropdown */}
+          <div ref={moreRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setMoreOpen((open) => !open)}
+              aria-haspopup="menu"
+              aria-expanded={moreOpen}
+              className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+            >
+              More
+              <svg viewBox="0 0 24 24" className={`h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-200 ${moreOpen ? "rotate-180" : ""}`} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+            {moreOpen && (
+              <div role="menu" className="animate-rise absolute left-0 top-full mt-2 w-56 overflow-hidden rounded-2xl border border-line bg-surface p-2 shadow-card">
+                {moreLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    role="menuitem"
+                    onClick={() => setMoreOpen(false)}
+                    className="block rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-surface-2 hover:text-brand"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
 
         {/* Desktop actions */}
@@ -134,6 +184,17 @@ export default function Navbar() {
                 href={link.href}
                 onClick={closeMenu}
                 className="rounded-lg px-3 py-3 text-base font-semibold hover:bg-surface-2"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <p className="px-3 pb-1 pt-3 text-xs font-bold uppercase tracking-wide text-muted">More</p>
+            {moreLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={closeMenu}
+                className="rounded-lg px-3 py-2.5 text-sm font-semibold text-muted hover:bg-surface-2 hover:text-fg"
               >
                 {link.label}
               </Link>
