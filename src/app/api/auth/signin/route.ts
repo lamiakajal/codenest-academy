@@ -2,11 +2,15 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { createSession } from "@/lib/auth";
 import { json, requireDatabase } from "@/lib/api";
+import { rateLimit } from "@/lib/rateLimit";
 import { isValidEmail, readJson } from "@/lib/validators";
 import User from "@/models/User";
 
 // POST /api/auth/signin - verifies credentials and starts a session
 export async function POST(request: Request) {
+  // Slows down password guessing: 10 attempts per 15 minutes per visitor
+  const limited = rateLimit(request, "signin", 10, 15 * 60 * 1000);
+  if (limited) return limited;
   const missingDb = requireDatabase();
   if (missingDb) return missingDb;
 
