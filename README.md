@@ -1,65 +1,83 @@
-# CodeNest Academy
+<div align="center">
 
-A full-stack coding school website built with Next.js (App Router), TypeScript, Tailwind CSS v4, MongoDB (Mongoose) and cookie-based authentication.
+# 🎓 CodeNest Academy
 
-## What is included
+**Enterprise-Grade Full-Stack Developer Education & Career Platform**
 
-- Responsive home page: hero with animated code editor, results strip, courses, why-CodeNest features, 16-week roadmap, mentors, campus, student projects, testimonials, FAQ and call to action
-- Light and dark mode (saved in the browser), custom scrollbar, scroll progress bar, back-to-top button
-- Launch screen with the logo and a round loader, plus a round loader for every page transition
-- Custom 404 page and error page
-- Sign up, sign in and sign out (bcrypt password hashing, signed httpOnly cookie)
-- Enrollment form and newsletter form that save to MongoDB
-- Forgot and reset password by email link, welcome and enrollment emails (SMTP optional)
-- My account page (protected) and an admin dashboard at /admin to review enrollments and change their status
-- Rate limiting on sign in, sign up, enroll, newsletter and password reset
-- All text and code comments are in English
+[![Next.js](<https://img.shields.io/badge/Next.js-15_(App_Router)-black?style=for-the-badge&logo=next.js>)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB_Atlas-Mongoose-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-## Run it locally
+[🌐 Live Production Platform](https://codenest-academy-lamiakajal.vercel.app) • [📁 GitHub Repository](https://github.com/lamiakajal/codenest-academy)
 
-```bash
-npm install
-cp .env.example .env.local   # then fill in the two values
-npm run dev
+</div>
+
+---
+
+## 📌 Executive Overview
+
+**CodeNest Academy** is a modern, high-performance web platform built to deliver structured technical curricula and seamless student intake. Engineered on Next.js 15 App Router and MongoDB, it features resilient authentication pipelines, administrative enrollment telemetry, email integration fallback, dynamic animations, and edge-ready security primitives.
+
+---
+
+## 🚀 Key Architectural Features
+
+- **🔐 Robust Authentication & Session Architecture:**
+  - Secure credential registration and sign-in powered by `bcrypt` (12-round hashing).
+  - Signed, tamper-proof 7-day persistent session management via `httpOnly`, `SameSite` cookies.
+  - Secure one-time tokenized password reset system (`/forgot-password`) with 30-minute expiry validation.
+
+- **📊 Comprehensive Administrative Operations (`/admin`):**
+  - Dedicated administrative workspace restricted via server-side identity assertion (`ADMIN_EMAILS`).
+  - Real-time aggregation metrics: total users, active program enrollments, and newsletter subscribers.
+  - Granular workflow state management (`Pending` ➔ `Contacted` ➔ `Confirmed`).
+
+- **🛡️ Edge-Grade Security & Traffic Throttling:**
+  - Sliding-window in-memory rate limiting across mutation vectors (Sign-in: 10 req / 15m; Enroll & Newsletter throttled).
+  - Custom HTTP security response headers preventing MIME sniffing, framing, and XSS exploits.
+
+- **🎨 Dynamic UI/UX & Motion Engineering:**
+  - Bespoke 60 FPS interactive physics-driven canvas layer with native user `prefers-reduced-motion` compliance.
+  - System-synced Light/Dark theme switching with zero layout-shift hydration.
+  - Smooth custom transitions, dynamic scroll progress indicators, and specialized brand loaders.
+
+- **📬 Scalable Messaging Engine:**
+  - Modular transactional email integration with SMTP capabilities.
+  - Zero-config development console fallback (reset links printed to standard output for seamless local validation).
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer              | Technology                                        |
+| :----------------- | :------------------------------------------------ |
+| **Framework**      | Next.js 15 (React 19, Server & Client Components) |
+| **Language**       | TypeScript (Strict type safety)                   |
+| **Styling**        | Tailwind CSS v4, Lucide Icons                     |
+| **Database**       | MongoDB Atlas with Mongoose ODM                   |
+| **Authentication** | Custom Session Tokens & `httpOnly` secure cookies |
+| **Email Service**  | Nodemailer with development console fallback      |
+| **Deployment**     | Vercel Serverless Edge Platform                   |
+
+---
+
+## 📂 Project Directory Architecture
+
+```text
+codenest-academy/
+├── public/                # Static assets, branding graphics, and avatars
+├── src/
+│   ├── app/               # Next.js App Router (Pages, Layouts, API Handlers)
+│   │   ├── (auth)/        # Authentication routes (/signin, /signup, /forgot-password)
+│   │   ├── account/       # Protected member portal
+│   │   ├── admin/         # Role-protected administrative console
+│   │   └── api/           # REST endpoints (auth, enroll, newsletter, admin)
+│   ├── components/        # Modular UI systems (Sections, Navbar, Footer, UI primitives)
+│   ├── data/              # Centralized site configurations, mentors, and tracks (site.ts)
+│   ├── lib/               # Database client, rate limiters, security guards, mailers
+│   └── models/            # Mongoose schemas (User, Enrollment, Subscriber)
+├── .env.example           # Environment template specifications
+└── package.json           # Manifest and dependency tree
 ```
-
-Open http://localhost:3000. The website works without a database. Only sign up, sign in, enroll and newsletter need MongoDB, and they show a clear message until `MONGODB_URI` is set.
-
-## Connect MongoDB
-
-1. Create a free cluster on MongoDB Atlas (or run MongoDB locally).
-2. Put the connection string in `.env.local` as `MONGODB_URI`.
-3. Put a long random string in `AUTH_SECRET`. Generate one with `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`.
-4. Restart `npm run dev`. Collections (`users`, `enrollments`, `subscribers`) are created automatically.
-
-## Admin dashboard
-
-1. Create your own account on the Sign up page first.
-2. Put that email in `ADMIN_EMAILS` in `.env.local` and restart the server.
-3. Sign in and open `/admin`. Other visitors see a normal 404 page.
-
-Create the admin account before the site is public. Email addresses are not verified yet, so someone could register an admin email before you do.
-
-## Emails
-
-Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` and `MAIL_FROM` to send real emails (any SMTP provider works). Without them, emails are printed in the terminal, so you can still copy the password reset link while testing. Set `SITE_URL` to your real domain in production.
-
-## Deploy
-
-Add `MONGODB_URI` and `AUTH_SECRET` as environment variables on your host (for example Vercel), then deploy. In MongoDB Atlas, allow the host's IP addresses under Network Access.
-
-## Project structure
-
-```
-src/
-  app/            pages, layout, loading, 404 and API routes (api/auth, api/enroll, api/newsletter)
-  components/     layout (navbar, footer), sections (home page blocks), ui (shared pieces)
-  data/site.ts    all website content: courses, mentors, FAQ, roadmap, projects
-  lib/            database connection, session helpers, validators
-  models/         Mongoose models (User, Enrollment, Subscriber)
-public/images/    SVG illustrations
-```
-
-## Editing content
-
-Almost all text lives in `src/data/site.ts`. Change the school name, contact details, prices, mentors and questions there.
