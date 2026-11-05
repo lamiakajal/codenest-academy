@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { testimonials } from "@/data/site";
 
@@ -14,7 +14,9 @@ function initials(name: string) {
 }
 
 const AVATAR_COLORS = ["bg-brand", "bg-accent", "bg-warm"];
-const AUTOPLAY_MS = 4500;
+const AUTOPLAY_MS = 3000; // time between slides
+const SLIDE_MS = 700; // slide animation length
+const TOTAL = testimonials.length;
 
 // Number of cards visible at once: 1 on phones, 2 on tablets, 3 on desktops
 function subscribeToWidth(callback: () => void) {
@@ -27,40 +29,63 @@ function getPerView() {
   return 1;
 }
 
-// Looping testimonial carousel with autoplay, arrows, dots and touch swipe
+// Endless testimonial carousel. The first cards are cloned at the end so the
+// loop continues smoothly in one direction instead of jumping back.
 export default function Testimonials() {
   const perView = useSyncExternalStore(subscribeToWidth, getPerView, () => 3);
-  const maxIndex = Math.max(0, testimonials.length - perView);
+  const slides = [...testimonials, ...testimonials.slice(0, perView)];
 
+  // index is the track position; instant disables the slide animation for silent jumps
   const [index, setIndex] = useState(0);
+  const [instant, setInstant] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const touchStart = useRef<number | null>(null);
 
-  // Keep the position valid when the screen size changes
-  const current = Math.min(index, maxIndex);
+  // Jump without animation, then re-enable animation on the next frames
+  const jumpTo = (target: number, then?: () => void) => {
+    setInstant(true);
+    setIndex(target);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        setInstant(false);
+        then?.();
+      }),
+    );
+  };
 
-  const next = () => setIndex(current >= maxIndex ? 0 : current + 1);
-  const prev = () => setIndex(current <= 0 ? maxIndex : current - 1);
+  const next = () => setIndex((i) => Math.min(i + 1, TOTAL));
+  const prev = () => {
+    if (index === 0) jumpTo(TOTAL, () => setIndex(TOTAL - 1));
+    else setIndex(index - 1);
+  };
 
-  // Autoplay loop: advances every few seconds and wraps back to the start
+  // When the slide reaches the cloned cards, silently jump back to the real start
+  const onTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
+    // Ignore hover transitions bubbling up from the cards inside the track
+    if (event.target !== event.currentTarget) return;
+    if (index >= TOTAL) jumpTo(0);
+  };
+
+  // Autoplay loop. It keeps running even after clicks and only pauses while a mouse is over it.
   useEffect(() => {
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (paused || reduceMotion) return;
+    if (paused) return;
     const id = window.setInterval(() => {
-      setIndex((i) => (Math.min(i, maxIndex) >= maxIndex ? 0 : Math.min(i, maxIndex) + 1));
+      setIndex((i) => (i >= TOTAL ? i : i + 1));
     }, AUTOPLAY_MS);
     return () => window.clearInterval(id);
-  }, [paused, maxIndex]);
+  }, [paused]);
 
   const onTouchEnd = (endX: number) => {
-    if (touchStart === null) return;
-    const distance = touchStart - endX;
+    if (touchStart.current === null) return;
+    const distance = touchStart.current - endX;
     if (Math.abs(distance) > 50) {
       if (distance > 0) next();
       else prev();
     }
-    setTouchStart(null);
+    touchStart.current = null;
   };
+
+  const activeDot = index % TOTAL;
 
   return (
     <section id="reviews" className="relative overflow-hidden py-20 md:py-28">
@@ -75,24 +100,28 @@ export default function Testimonials() {
           role="region"
           aria-roledescription="carousel"
           aria-label="Student testimonials"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocus={() => setPaused(true)}
-          onBlur={() => setPaused(false)}
-          onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
+          onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
+          onPointerLeave={() => setPaused(false)}
+          onTouchStart={(e) => {
+            touchStart.current = e.touches[0].clientX;
+          }}
           onTouchEnd={(e) => onTouchEnd(e.changedTouches[0].clientX)}
         >
           <div className="-mx-3 overflow-hidden px-0 py-4">
             <div
-              className="flex transition-transform duration-700 ease-[cubic-bezier(0.22,0.8,0.2,1)]"
-              style={{ transform: `translateX(-${current * (100 / perView)}%)` }}
+              className="flex"
+              onTransitionEnd={onTransitionEnd}
+              style={{
+                transform: `translateX(-${index * (100 / perView)}%)`,
+                transition: instant ? "none" : `transform ${SLIDE_MS}ms cubic-bezier(0.22, 0.8, 0.2, 1)`,
+              }}
             >
-              {testimonials.map((item, i) => (
+              {slides.map((item, i) => (
                 <div
-                  key={item.name}
+                  key={`${item.name}-${i}`}
                   className="flex-none px-3"
                   style={{ width: `${100 / perView}%` }}
-                  aria-hidden={i < current || i >= current + perView}
+                  aria-hidden={i < index || i >= index + perView || i >= TOTAL}
                 >
                   <figure className="flex h-full flex-col justify-between rounded-3xl border border-line bg-surface p-8 shadow-card transition-colors duration-300 hover:border-brand/60">
                     <div>
@@ -108,7 +137,7 @@ export default function Testimonials() {
                     <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-6">
                       <span
                         className={`grid h-12 w-12 place-items-center rounded-full font-display text-sm font-extrabold text-white ${
-                          AVATAR_COLORS[i % AVATAR_COLORS.length]
+                          AVATAR_COLORS[i % TOTAL % AVATAR_COLORS.length]
                         }`}
                         aria-hidden="true"
                       >
@@ -140,15 +169,15 @@ export default function Testimonials() {
             </button>
 
             <div className="flex items-center gap-2">
-              {Array.from({ length: maxIndex + 1 }).map((_, dot) => (
+              {Array.from({ length: TOTAL }).map((_, dot) => (
                 <button
                   key={dot}
                   type="button"
                   onClick={() => setIndex(dot)}
                   aria-label={`Go to testimonials ${dot + 1}`}
-                  aria-current={dot === current}
+                  aria-current={dot === activeDot}
                   className={`h-2.5 rounded-full transition-all duration-300 ${
-                    dot === current ? "w-8 bg-brand" : "w-2.5 bg-line hover:bg-muted"
+                    dot === activeDot ? "w-8 bg-brand" : "w-2.5 bg-line hover:bg-muted"
                   }`}
                 />
               ))}
