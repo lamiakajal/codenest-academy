@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import Field from "./Field";
 import FormMessage from "./FormMessage";
 import type { ApiResponse } from "@/types";
@@ -81,7 +82,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
           placeholder={isSignup ? "At least 8 characters" : "Your password"}
           hint={isSignup ? "Use 8 or more characters with at least one letter and one number." : undefined}
         />
-        <label className="mt-2 flex cursor-pointer items-center gap-2 text-xs text-muted">
+        <div className="mt-2 flex items-center justify-between gap-3">
+        <label className="flex cursor-pointer items-center gap-2 text-xs text-muted">
           <input
             type="checkbox"
             checked={showPassword}
@@ -90,6 +92,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
           />
           Show password
         </label>
+        {!isSignup && (
+          <Link href="/forgot-password" className="text-xs font-semibold text-brand hover:underline">
+            Forgot password?
+          </Link>
+        )}
+        </div>
       </div>
 
       {error && <FormMessage type="error" message={error} />}
