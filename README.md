@@ -63,21 +63,13 @@
 
 ---
 
-## 📂 Project Directory Architecture
+## ⚙️ Local Development & Setup
 
-```text
-codenest-academy/
-├── public/                # Static assets, branding graphics, and avatars
-├── src/
-│   ├── app/               # Next.js App Router (Pages, Layouts, API Handlers)
-│   │   ├── (auth)/        # Authentication routes (/signin, /signup, /forgot-password)
-│   │   ├── account/       # Protected member portal
-│   │   ├── admin/         # Role-protected administrative console
-│   │   └── api/           # REST endpoints (auth, enroll, newsletter, admin)
-│   ├── components/        # Modular UI systems (Sections, Navbar, Footer, UI primitives)
-│   ├── data/              # Centralized site configurations, mentors, and tracks (site.ts)
-│   ├── lib/               # Database client, rate limiters, security guards, mailers
-│   └── models/            # Mongoose schemas (User, Enrollment, Subscriber)
-├── .env.example           # Environment template specifications
-└── package.json           # Manifest and dependency tree
+Follow these steps to run the project locally on your machine.
+
+**1. Clone the repository:**
+
+```bash
+git clone [https://github.com/lamiakajal/codenest-academy.git](https://github.com/lamiakajal/codenest-academy.git)
+cd codenest-academy
 ```
